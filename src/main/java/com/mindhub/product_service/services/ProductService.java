@@ -1,8 +1,6 @@
 package com.mindhub.product_service.services;
 
-import com.mindhub.product_service.dtos.NewProductDTO;
-import com.mindhub.product_service.dtos.ProductDTO;
-import com.mindhub.product_service.dtos.UpdateProductDTO;
+import com.mindhub.product_service.dtos.*;
 import com.mindhub.product_service.models.Product;
 
 import java.util.List;
@@ -25,4 +23,8 @@ public interface ProductService {
     public boolean deleteProduct(Long id);
 
     public boolean existsById(Long id);
+
+    boolean existsProductById(Long id);
+
+    List<ExistentProductsRecord> getAllAvailableProducts(List<ProductQuantityRecord> productQuantityRecordList);
 }

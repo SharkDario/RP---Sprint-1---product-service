@@ -1,8 +1,6 @@
 package com.mindhub.product_service.controllers;
 
-import com.mindhub.product_service.dtos.NewProductDTO;
-import com.mindhub.product_service.dtos.ProductDTO;
-import com.mindhub.product_service.dtos.UpdateProductDTO;
+import com.mindhub.product_service.dtos.*;
 import com.mindhub.product_service.services.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -97,5 +95,11 @@ public class ProductController {
             return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<List<ExistentProductsRecord>> existsProducts(@RequestBody List<ProductQuantityRecord> recordList){
+        List<ExistentProductsRecord> products = productService.getAllAvailableProducts(recordList);
+        return ResponseEntity.ok(products);
     }
 }
