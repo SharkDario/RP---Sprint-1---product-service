@@ -1,14 +1,14 @@
 package com.mindhub.product_service.services.impl;
 
-import com.mindhub.product_service.dtos.NewProductDTO;
-import com.mindhub.product_service.dtos.ProductDTO;
-import com.mindhub.product_service.dtos.UpdateProductDTO;
+import com.mindhub.product_service.dtos.*;
+import com.mindhub.product_service.exceptions.ProductException;
 import com.mindhub.product_service.models.Product;
 import com.mindhub.product_service.repositories.ProductRepository;
 import com.mindhub.product_service.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,5 +78,32 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean existsById(Long id) {
         return productRepository.existsById(id);
+    }
+
+    @Override
+    public boolean existsProductById(Long id) {
+        return productRepository.existsById(id);
+    }
+
+    @Override
+    public List<ExistentProductsRecord> getAllAvailableProducts(List<ProductQuantityRecord> productQuantityRecordList) {
+        List<ExistentProductsRecord> listOfProducts = new ArrayList<>();
+        productQuantityRecordList.forEach( product -> {
+            if (existsProductById(product.id())){
+                try {
+                    Product realProduct = getProductById(product.id());
+                    if (realProduct.getStock()>=product.quantity()){
+                        listOfProducts.add(new ExistentProductsRecord(product.id(), realProduct.getPrice(), product.quantity()));
+                        realProduct.setStock(realProduct.getStock() - product.quantity());
+                        productRepository.save(realProduct);
+                    } else {
+                        listOfProducts.add(new ExistentProductsRecord(product.id(), null, product.quantity()));
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return listOfProducts;
     }
 }
