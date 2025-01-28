@@ -98,4 +98,10 @@ public class ProductController {
         }
         return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
     }
+
+    @PutMapping
+    public ResponseEntity<List<ExistentProductsRecord>> existsProducts(@RequestBody List<ProductQuantityRecord> recordList){
+        List<ExistentProductsRecord> products = productService.getAllAvailableProducts(recordList);
+        return ResponseEntity.ok(products);
+    }
 }
