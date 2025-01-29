@@ -1,8 +1,7 @@
 package com.mindhub.product_service.controllers;
 
-import com.mindhub.product_service.dtos.NewProductDTO;
-import com.mindhub.product_service.dtos.ProductDTO;
-import com.mindhub.product_service.dtos.UpdateProductDTO;
+import com.mindhub.product_service.dtos.*;
+import com.mindhub.product_service.exceptions.ProductException;
 import com.mindhub.product_service.services.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -97,5 +96,32 @@ public class ProductController {
             return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<HashMap<Long, Integer>> existsProducts(@RequestBody List<ProductQuantityRecord> recordList){
+        HashMap<Long, Integer> products = productService.getAllAvailableProducts(recordList);
+        return ResponseEntity.ok(products);
+    }
+
+    @PutMapping("/details")
+    public ResponseEntity<List<NewProductDTO>> detailsProducts(@RequestBody List<ProductQuantityRecord> recordList){
+        List<NewProductDTO> products = productService.getAllDetailsProducts(recordList);
+        return ResponseEntity.ok(products);
+    }
+
+    /*
+    @PutMapping
+    public ResponseEntity<List<ExistentProductsRecord>> existsProducts(@RequestBody List<ProductQuantityRecord> recordList){
+        List<ExistentProductsRecord> products = productService.getAllAvailableProducts(recordList);
+        return ResponseEntity.ok(products);
+    }
+
+     */
+
+    @PutMapping("/to-order")
+    public ResponseEntity<String> existProduct(@RequestBody List<ProductQuantityRecord> quantityRecord) throws ProductException {
+        productService.updateProductsQuantity(quantityRecord);
+        return new ResponseEntity<String>("The product/s were been updated successfully", HttpStatus.OK);
     }
 }
