@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "bbc3753a-56b7-4594-943d-f73874fb4947",
+		"name": "RP - Sprint 5 - product-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40829075"
+	},
+	"item": [
+		{
+			"name": "(Admin) Verify productId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/admin/exists/{productId}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"admin",
+						"exists",
+						"{productId}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List All Products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXJpb0BnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3MzgyOTI1NTksImV4cCI6MTczODI5MjYzOX0.d4VXaFkD_yO_vEMsf10j4lWegf3BQIlac3tW5v9QrLf09M_JSdqZTVtNkDqpMok6a1kKRpLzWNX-GdBjd2CDdg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/public",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"public"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(Admin) Product by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/admin/{id}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"admin",
+						"{id}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(Admin) Create Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Cheese\",\r\n    \"description\": \"kg\",\r\n    \"price\": 10,\r\n    \"stock\": 200\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/products/admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(Admin) Update Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Cheese\",\r\n    \"description\": \"kg\",\r\n    \"price\": 10,\r\n    \"stock\": 250\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/products/admin/{id}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"admin",
+						"{id}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(Admin) Delete Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/admin/{id}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"admin",
+						"{id}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,8 +1,7 @@
 package com.mindhub.product_service.controllers;
 
-import com.mindhub.product_service.dtos.NewProductDTO;
-import com.mindhub.product_service.dtos.ProductDTO;
-import com.mindhub.product_service.dtos.UpdateProductDTO;
+import com.mindhub.product_service.dtos.*;
+import com.mindhub.product_service.exceptions.ProductException;
 import com.mindhub.product_service.services.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api")
 public class ProductController {
     // Dependencies Injection - Only things that are in the context of Spring Boot (has to be Component)
     // From behind generates a constructor and injects the bean for this repository (interface)
@@ -56,21 +55,27 @@ public class ProductController {
     }
 
     // Endpoint to verify if a productId exists
-    @GetMapping("/exists/{productId}")
+    @GetMapping("/products/admin/exists/{productId}")
     public ResponseEntity<Boolean> existsById(@PathVariable Long productId) {
         boolean exists = productService.existsById(productId);
         return ResponseEntity.ok(exists);
     }
 
     // GET /products: Get all products.
-    @GetMapping
+    @GetMapping("/products/public")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         List<ProductDTO> products = productService.getAllProducts();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+    @GetMapping("/products/admin/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) throws ProductException {
+        ProductDTO product = productService.getProductDTOById(id);
+        return ResponseEntity.ok(product);
+    }
+
     // POST /products: Create a product.
-    @PostMapping
+    @PostMapping("/products/admin")
     public ResponseEntity<?> createProduct(@Valid @RequestBody NewProductDTO newProductDTO) {
         productService.createProduct(newProductDTO);
         return new ResponseEntity<>("Product created successfully", HttpStatus.CREATED);
@@ -78,7 +83,7 @@ public class ProductController {
 
     // PUT /products/{id}: Update the stock of a product.
     // PATCH: Update name, description, price, stock
-    @PatchMapping("/{id}")
+    @PatchMapping("/products/admin/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @Valid @RequestBody UpdateProductDTO updateProductDTO) {
         try {
             productService.updateProduct(id, updateProductDTO);
@@ -90,12 +95,30 @@ public class ProductController {
         }
     }
     // DELETE /products/{id}
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/products/admin/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         boolean deleted = productService.deleteProduct(id);
         if (!deleted) {
             return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+    }
+
+    @PutMapping("/internal")
+    public ResponseEntity<HashMap<Long, Integer>> existsProducts(@RequestBody List<ProductQuantityRecord> recordList){
+        HashMap<Long, Integer> products = productService.getAllAvailableProducts(recordList);
+        return ResponseEntity.ok(products);
+    }
+
+    @PutMapping("/internal/details")
+    public ResponseEntity<List<NewProductDTO>> detailsProducts(@RequestBody List<ProductQuantityRecord> recordList){
+        List<NewProductDTO> products = productService.getAllDetailsProducts(recordList);
+        return ResponseEntity.ok(products);
+    }
+
+    @PutMapping("/internal/to-order")
+    public ResponseEntity<String> existProduct(@RequestBody List<ProductQuantityRecord> quantityRecord) throws ProductException {
+        productService.updateProductsQuantity(quantityRecord);
+        return new ResponseEntity<String>("The product/s were been updated successfully", HttpStatus.OK);
     }
 }
